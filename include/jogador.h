@@ -7,11 +7,13 @@ typedef struct {
     Vector2 posicao;
     float tamanho;
     float velocidade;
+    Texture2D textura;
 } Jogador;
 
 void iniciar_jogador(Jogador *jogador, float x, float y);
 void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt);
 void desenhar_jogador(const Jogador *jogador);
 Vector2 centro_do_jogador(const Jogador *jogador);
+void descarregar_jogador(Jogador *jogador);
 
 #endif

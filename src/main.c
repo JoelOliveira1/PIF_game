@@ -7,9 +7,9 @@
 
 #define RAIO_LANTERNA 160
 
-int main(void)
-{
-    InitWindow(LARGURA_TELA, ALTURA_TELA, "Manicomio");
+int main(void){
+
+    InitWindow(LARGURA_TELA, ALTURA_TELA, "Paranoia");
     SetTargetFPS(60);
 
     srand(time(NULL));
@@ -39,7 +39,7 @@ int main(void)
             desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
         EndDrawing();
     }
-
+    descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
     CloseWindow();
     return 0;

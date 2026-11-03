@@ -1,14 +1,13 @@
 #include "jogador.h"
 
-void iniciar_jogador(Jogador *jogador, float x, float y)
-{
+void iniciar_jogador(Jogador *jogador, float x, float y){
     jogador->posicao = (Vector2){x, y};
-    jogador->tamanho = 20;
+    jogador->tamanho = 32;
     jogador->velocidade = 180;
+    jogador->textura = LoadTexture("assets/personagem/32x.png");
 }
 
-void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt)
-{
+void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt){
     float dx = 0, dy = 0;
 
     if (IsKeyDown(KEY_D)) dx++;
@@ -44,19 +43,38 @@ void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt)
         jogador->posicao.y = area.y;
 }
 
-void desenhar_jogador(const Jogador *jogador)
-{
-    DrawRectangle(
+void desenhar_jogador(const Jogador *jogador){
+
+    Rectangle origem = {
+        0,
+        0,
+        jogador->textura.width,
+        jogador->textura.height / 2
+        
+    };
+
+    Rectangle destino = {
         jogador->posicao.x,
         jogador->posicao.y,
         jogador->tamanho,
-        jogador->tamanho,
-        RED
+        jogador->tamanho
+    };
+
+    DrawTexturePro(
+        jogador->textura,
+        origem,
+        destino,
+        (Vector2){0, 0},
+        0,
+        WHITE
     );
 }
 
-Vector2 centro_do_jogador(const Jogador *jogador)
-{
+void descarregar_jogador(Jogador *jogador){
+    UnloadTexture(jogador->textura);
+}
+
+Vector2 centro_do_jogador(const Jogador *jogador){
     return (Vector2){
         jogador->posicao.x + jogador->tamanho / 2,
         jogador->posicao.y + jogador->tamanho / 2
