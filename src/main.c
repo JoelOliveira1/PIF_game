@@ -1,60 +1,46 @@
+#include <stdlib.h>
+#include <time.h>
 #include "raylib.h"
-#define TAMANHO_TILE 32
-#define COLUNAS 40
-#define LINHAS 22
-#define LARGURA_TELA (COLUNAS * TAMANHO_TILE) 
-#define ALTURA_TELA  (LINHAS  * TAMANHO_TILE)
-#define TILE_CHAO   0
-#define TILE_PAREDE 1
+#include "mapa.h"
+#include "jogador.h"
+#include "lanterna.h"
 
-
-void gerar_mapa(int mapa[LINHAS][COLUNAS]){
-
-    for (int linha = 0; linha < LINHAS; linha++) {
-        for (int coluna = 0; coluna < COLUNAS; coluna++) {
-            int eborda = (linha == 0 || linha == LINHAS - 1 || coluna == 0 || coluna == COLUNAS - 1);
-
-            if (eborda) {
-                mapa[linha][coluna] = TILE_PAREDE;
-            } else {
-                mapa[linha][coluna] = TILE_CHAO;
-            }
-        }
-    }
-}
-
-void desenhar_mapa(int mapa[LINHAS][COLUNAS]){
-
-    for (int linha = 0; linha < LINHAS; linha++) {
-        for (int coluna = 0; coluna < COLUNAS; coluna++) {
-            int x = coluna * TAMANHO_TILE;
-            int y = linha  * TAMANHO_TILE; 
-
-            if (mapa[linha][coluna] == TILE_PAREDE) {
-                DrawRectangle(x, y, TAMANHO_TILE, TAMANHO_TILE, (Color){70, 70, 80, 255});
-                DrawRectangleLines(x, y, TAMANHO_TILE, TAMANHO_TILE, (Color){40, 40, 50, 255});
-            } else {
-                DrawRectangle(x, y, TAMANHO_TILE, TAMANHO_TILE, (Color){25, 25, 30, 255}); 
-            }
-        }
-    }
-}
+#define RAIO_LANTERNA 160
 
 int main(void)
 {
-    InitWindow(LARGURA_TELA, ALTURA_TELA, "Paranoia");
+    InitWindow(LARGURA_TELA, ALTURA_TELA, "Manicomio");
     SetTargetFPS(60);
 
+    srand(time(NULL));
+
     int mapa[LINHAS][COLUNAS];
-    gerar_mapa(mapa);
+    
+    if (!carregar_mapa(mapa, "assets/paredes/mapa1.txt")) {
+        CloseWindow();
+        return 1;
+    }
+
+    Jogador jogador;
+    iniciar_jogador(&jogador, 2 * TAMANHO + 6, 2 * TAMANHO + 6);
+
+    Lanterna lanterna;
+    iniciar_lanterna(&lanterna, RAIO_LANTERNA);
 
     while (!WindowShouldClose()) {
+        float dt = GetFrameTime();
+
+        atualizar_jogador(&jogador, mapa, dt);
+
         BeginDrawing();
-        ClearBackground(BLACK);
-        desenhar_mapa(mapa);
+            ClearBackground(BLACK);
+            desenhar_mapa(mapa);
+            desenhar_jogador(&jogador);
+            desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
         EndDrawing();
     }
 
+    descarregar_lanterna(&lanterna);
     CloseWindow();
     return 0;
 }
