@@ -4,13 +4,19 @@
 #include "mapa.h"
 #include "jogador.h"
 #include "lanterna.h"
+#include "tela.h"
 
 #define RAIO_LANTERNA 160
 
 int main(void){
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(LARGURA_TELA, ALTURA_TELA, "Paranoia");
+    ToggleBorderlessWindowed();
     SetTargetFPS(60);
+
+    Tela tela;
+    iniciar_tela(&tela);
 
     srand(time(NULL));
 
@@ -32,15 +38,16 @@ int main(void){
 
         atualizar_jogador(&jogador, mapa, dt);
 
-        BeginDrawing();
+        comecar_desenho_tela(&tela);
             ClearBackground(BLACK);
             desenhar_mapa(mapa);
             desenhar_jogador(&jogador);
             desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
-        EndDrawing();
+        terminar_desenho_tela(&tela);
     }
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
+    descarregar_tela(&tela);
     CloseWindow();
     return 0;
 }
