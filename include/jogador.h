@@ -7,6 +7,7 @@ typedef struct {
     Vector2 posicao;
     float tamanho;
     float velocidade;
+    float angulo;
     Texture2D textura;
 } Jogador;
 

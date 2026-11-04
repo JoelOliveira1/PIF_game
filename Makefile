@@ -12,6 +12,12 @@ LDFLAGS = -lraylib -lm
 SRC     = $(wildcard src/*.c)
 TARGET  = jogo
 
+# Precisa disso pra funcionar no Windows!!!
+ifeq ($(OS),Windows_NT)
+    LDFLAGS += -lopengl32 -lgdi32 -lwinmm
+    TARGET  = jogo.exe
+endif
+
 all: $(TARGET)
 
 $(TARGET): $(SRC)
