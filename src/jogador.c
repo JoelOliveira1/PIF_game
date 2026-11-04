@@ -1,9 +1,13 @@
+#include <math.h>
 #include "jogador.h"
+
+#define AJUSTE_SPRITE -90.0f
 
 void iniciar_jogador(Jogador *jogador, float x, float y){
     jogador->posicao = (Vector2){x, y};
     jogador->tamanho = 32;
     jogador->velocidade = 180;
+    jogador->angulo = 0;
     jogador->textura = LoadTexture("assets/personagem/32x.png");
 }
 
@@ -41,6 +45,10 @@ void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt){
 
     if (!colide_parede(mapa, area))
         jogador->posicao.y = area.y;
+
+    Vector2 mouse = GetMousePosition();
+    Vector2 centro = centro_do_jogador(jogador);
+    jogador->angulo = atan2f(mouse.y - centro.y, mouse.x - centro.x) * RAD2DEG + AJUSTE_SPRITE;
 }
 
 void desenhar_jogador(const Jogador *jogador){
@@ -52,10 +60,12 @@ void desenhar_jogador(const Jogador *jogador){
         jogador->textura.height / 2
         
     };
+    
+    Vector2 centro = centro_do_jogador(jogador);
 
     Rectangle destino = {
-        jogador->posicao.x,
-        jogador->posicao.y,
+        centro.x,
+        centro.y,
         jogador->tamanho,
         jogador->tamanho
     };
@@ -64,8 +74,8 @@ void desenhar_jogador(const Jogador *jogador){
         jogador->textura,
         origem,
         destino,
-        (Vector2){0, 0},
-        0,
+        (Vector2){jogador->tamanho / 2, jogador->tamanho / 2},
+        jogador->angulo,
         WHITE
     );
 }
