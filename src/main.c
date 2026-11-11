@@ -5,6 +5,7 @@
 #include "jogador.h"
 #include "lanterna.h"
 #include "tela.h"
+#include "tiro.h"
 
 #define RAIO_LANTERNA 160
 
@@ -32,19 +33,31 @@ int main(void){
 
     Lanterna lanterna;
     iniciar_lanterna(&lanterna, RAIO_LANTERNA);
+    Tiro *tiros = NULL;
+    int municao = 12;
 
     while (!WindowShouldClose()) {
         float dt = GetFrameTime();
 
         atualizar_jogador(&jogador, mapa, dt);
+        
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && municao > 0) {
+            if (criar_tiro(&tiros, centro_do_jogador(&jogador), GetMousePosition())) {
+                municao--;
+            }
+        }
+        atualizar_tiros(&tiros, mapa, dt);
 
         comecar_desenho_tela(&tela);
             ClearBackground(BLACK);
             desenhar_mapa(mapa);
+            desenhar_tiros(tiros);
             desenhar_jogador(&jogador);
             desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
+            DrawText(TextFormat("Municao: %d", municao), 20, 20, 20, WHITE);
         terminar_desenho_tela(&tela);
     }
+    liberar_tiros(&tiros);
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
     descarregar_tela(&tela);
