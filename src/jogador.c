@@ -8,7 +8,7 @@ void iniciar_jogador(Jogador *jogador, float x, float y){
     jogador->tamanho = 32;
     jogador->velocidade = 180;
     jogador->angulo = 0;
-    jogador->textura = LoadTexture("assets/personagem/32x.png");
+    jogador->textura = LoadTexture("assets/personagem/personagem.png");
 }
 
 void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt){
