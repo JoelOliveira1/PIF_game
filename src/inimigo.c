@@ -201,7 +201,7 @@ void verificar_colisao_jogador(Inimigo *lista, Jogador *jogador) {
         if (CheckCollisionRecs(area, area_do_inimigo(lista))) {
 
             if (jogador->tempo_dano <= 0) {
-                jogador->vida -= 20;
+                jogador->vida -= 30; //DANO DE INIMIGO
                 jogador->tempo_dano = 1.0f;
             }
             break;
