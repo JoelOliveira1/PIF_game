@@ -6,6 +6,7 @@
 #include "lanterna.h"
 #include "tela.h"
 #include "tiro.h"
+#include "inimigo.h"
 #include "raking.h" // 1. Incluindo o sistema de ranking
 
 #define RAIO_LANTERNA 160
@@ -37,6 +38,11 @@ int main(void){
     Tiro *tiros = NULL;
     int municao = 12;
 
+    Texture2D textura_inimigo = LoadTexture("assets/personagem/inimigo.png");
+    Inimigo *inimigos = NULL;
+    gerar_inimigos(&inimigos, mapa, 5, jogador.posicao);
+    int abates = 0;
+
     // --- 2. INICIALIZAÇÃO DO RANKING, CRONÔMETRO E PONTUAÇÃO ---
     RegistroPlacar* placar = CarregarPlacar("top_scores.txt");
     float cronometro = 0.0f;
@@ -52,8 +58,7 @@ int main(void){
             
             // Exemplo de aumento de pontuação: Aqui você pode colocar a lógica
             // para ganhar pontos (ex: matar um inimigo, pegar um item no mapa, etc)
-            // Por enquanto, ganha 10 pontos a cada segundo vivo:
-            pontuacao = (int)cronometro * 10; 
+            pontuacao = (int)cronometro * 10 + abates * 100;
 
             atualizar_jogador(&jogador, mapa, dt);
             
@@ -63,6 +68,9 @@ int main(void){
                 }
             }
             atualizar_tiros(&tiros, mapa, dt);
+
+            atualizar_inimigos(inimigos, mapa, centro_do_jogador(&jogador), dt);
+            abates += atingir_inimigos(&inimigos, &tiros);
 
             // --- 4. CONDIÇÃO PARA FINALIZAR O JOGO E SALVAR ---
             // Simulando o fim de jogo ao apertar ENTER
@@ -81,6 +89,7 @@ int main(void){
                 // Desenha o jogo rolando normalmente
                 desenhar_mapa(mapa);
                 desenhar_tiros(tiros);
+                desenhar_inimigos(inimigos, textura_inimigo);
                 desenhar_jogador(&jogador);
                 desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
                 
@@ -117,6 +126,8 @@ int main(void){
     LiberarPlacar(placar);
     
     liberar_tiros(&tiros);
+    liberar_inimigos(&inimigos);
+    UnloadTexture(textura_inimigo);
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
     descarregar_tela(&tela);

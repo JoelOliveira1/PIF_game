@@ -2,6 +2,17 @@
 #include "jogador.h"
 
 #define AJUSTE_SPRITE -90.0f
+#define HITBOX_JOGADOR 24
+
+static Rectangle area_do_jogador(const Jogador *jogador){
+    Vector2 centro = centro_do_jogador(jogador);
+    return (Rectangle){
+        centro.x - HITBOX_JOGADOR / 2,
+        centro.y - HITBOX_JOGADOR / 2,
+        HITBOX_JOGADOR,
+        HITBOX_JOGADOR
+    };
+}
 
 void iniciar_jogador(Jogador *jogador, float x, float y){
     jogador->posicao = (Vector2){x, y};
@@ -24,27 +35,22 @@ void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt){
         dy *= 0.7071f;
     }
 
+    float passo_x = dx * jogador->velocidade * dt;
+    float passo_y = dy * jogador->velocidade * dt;
+
     Rectangle area;
 
-    area = (Rectangle){
-        jogador->posicao.x + dx * jogador->velocidade * dt,
-        jogador->posicao.y,
-        jogador->tamanho,
-        jogador->tamanho
-    };
+    area = area_do_jogador(jogador);
+    area.x += passo_x;
 
     if (!colide_parede(mapa, area))
-        jogador->posicao.x = area.x;
+        jogador->posicao.x += passo_x;
 
-    area = (Rectangle){
-        jogador->posicao.x,
-        jogador->posicao.y + dy * jogador->velocidade * dt,
-        jogador->tamanho,
-        jogador->tamanho
-    };
+    area = area_do_jogador(jogador);
+    area.y += passo_y;
 
     if (!colide_parede(mapa, area))
-        jogador->posicao.y = area.y;
+        jogador->posicao.y += passo_y;
 
     Vector2 mouse = GetMousePosition();
     Vector2 centro = centro_do_jogador(jogador);

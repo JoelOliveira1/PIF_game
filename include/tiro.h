@@ -1,5 +1,6 @@
 #ifndef TIRO_H
 #define TIRO_H
+#define TAMANHO_TIRO 4
 
 #include "raylib.h"
 #include "mapa.h"

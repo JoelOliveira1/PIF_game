@@ -1,10 +1,8 @@
-
 #include <stdlib.h>
 #include <math.h>
 #include "tiro.h"
 
 #define VELOCIDADE_TIRO 600
-#define TAMANHO_TIRO 4
 
 int criar_tiro(Tiro **lista, Vector2 origem, Vector2 alvo) {
 
