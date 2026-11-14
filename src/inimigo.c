@@ -190,6 +190,26 @@ void desenhar_inimigos(const Inimigo *lista, Texture2D textura) {
     }
 }
 
+void verificar_colisao_jogador(Inimigo *lista, Jogador *jogador) {
+
+    Vector2 centro = centro_do_jogador(jogador);
+
+    Rectangle area = {centro.x - 12, centro.y - 12, 24, 24};
+
+      while (lista != NULL) {
+
+        if (CheckCollisionRecs(area, area_do_inimigo(lista))) {
+
+            if (jogador->tempo_dano <= 0) {
+                jogador->vida -= 20;
+                jogador->tempo_dano = 1.0f;
+            }
+            break;
+        }
+        lista = lista->prox;
+    }
+}
+
 void liberar_inimigos(Inimigo **lista){
 
     Inimigo *atual = *lista;

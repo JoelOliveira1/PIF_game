@@ -19,6 +19,8 @@ void iniciar_jogador(Jogador *jogador, float x, float y){
     jogador->tamanho = 32;
     jogador->velocidade = 180;
     jogador->angulo = 0;
+    jogador->vida = 100;
+    jogador->tempo_dano = 0;
     jogador->textura = LoadTexture("assets/personagem/personagem.png");
 }
 
@@ -43,14 +45,18 @@ void atualizar_jogador(Jogador *jogador, int mapa[LINHAS][COLUNAS], float dt){
     area = area_do_jogador(jogador);
     area.x += passo_x;
 
-    if (!colide_parede(mapa, area))
+    if (!colide_parede(mapa, area)){
         jogador->posicao.x += passo_x;
-
+    }
     area = area_do_jogador(jogador);
     area.y += passo_y;
 
-    if (!colide_parede(mapa, area))
+    if (!colide_parede(mapa, area)){
         jogador->posicao.y += passo_y;
+    }
+    if (jogador->tempo_dano > 0){
+    jogador->tempo_dano -= dt;
+    }
 
     Vector2 mouse = GetMousePosition();
     Vector2 centro = centro_do_jogador(jogador);
@@ -76,13 +82,17 @@ void desenhar_jogador(const Jogador *jogador){
         jogador->tamanho
     };
 
+    Color cor = WHITE;
+    if (jogador->tempo_dano > 0)
+        cor = RED;
+
     DrawTexturePro(
         jogador->textura,
         origem,
         destino,
         (Vector2){jogador->tamanho / 2, jogador->tamanho / 2},
         jogador->angulo,
-        WHITE
+        cor
     );
 }
 

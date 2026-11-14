@@ -61,12 +61,19 @@ int main(void){
             pontuacao = (int)cronometro * 10 + abates * 100;
 
             atualizar_jogador(&jogador, mapa, dt);
-            
+                        
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && municao > 0) {
                 if (criar_tiro(&tiros, centro_do_jogador(&jogador), GetMousePosition())) {
                     municao--;
                 }
             }
+
+            verificar_colisao_jogador(inimigos, &jogador);
+            if (jogador.vida <= 0) {
+                jogador.vida = 0;
+                jogoFinalizado = true;
+            }
+
             atualizar_tiros(&tiros, mapa, dt);
 
             atualizar_inimigos(inimigos, mapa, centro_do_jogador(&jogador), dt);
@@ -74,7 +81,7 @@ int main(void){
 
             // --- 4. CONDIÇÃO PARA FINALIZAR O JOGO E SALVAR ---
             // Simulando o fim de jogo ao apertar ENTER
-            if (IsKeyPressed(KEY_ENTER)) {
+            if (jogador.vida <= 0) {
                 jogoFinalizado = true;
                 // Insere dinamicamente na lista encadeada e salva no arquivo txt
                 placar = InserirPlacar(placar, "Jogador1", pontuacao, cronometro);
@@ -94,6 +101,7 @@ int main(void){
                 desenhar_lanterna(&lanterna, centro_do_jogador(&jogador));
                 
                 // --- 5. DESENHANDO A HUD DO JOGADOR ---
+                DrawText(TextFormat("Vida: %d", jogador.vida),20, 110, 20, RED);
                 DrawText(TextFormat("Municao: %d", municao), 20, 20, 20, WHITE);
                 DrawText(TextFormat("Tempo: %.2f", cronometro), 20, 50, 20, LIGHTGRAY);
                 DrawText(TextFormat("Pontos: %d", pontuacao), 20, 80, 20, GOLD);

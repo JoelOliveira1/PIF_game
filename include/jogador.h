@@ -9,6 +9,8 @@ typedef struct {
     float velocidade;
     float angulo;
     Texture2D textura;
+    int vida;
+    float tempo_dano;
 } Jogador;
 
 void iniciar_jogador(Jogador *jogador, float x, float y);
