@@ -5,25 +5,25 @@ int carregar_mapa(int mapa[LINHAS][COLUNAS], const char *arquivo)
 {
     FILE *fp = fopen(arquivo, "r");
 
-    if (fp == NULL) {
+    if (fp == NULL){
         return 0;
     }
     char c;
 
-    for (int i = 0; i < LINHAS; i++) {
-        for (int j = 0; j < COLUNAS; j++) {
+    for (int i = 0; i < LINHAS; i++){
+        for (int j = 0; j < COLUNAS; j++){
 
-            if (fscanf(fp, " %c", &c) != 1) {
+            if (fscanf(fp, " %c", &c) != 1){
                 fclose(fp);
                 return 0;
             }
-            if (c == '#') {
+            if (c == '#'){
                 mapa[i][j] = PAREDE;
             }
-            else if (c == '.') {
+            else if (c == '.'){
                 mapa[i][j] = CHAO;
             }
-            else {
+            else{
                 fclose(fp);
                 return 0;
             }
@@ -36,12 +36,12 @@ int carregar_mapa(int mapa[LINHAS][COLUNAS], const char *arquivo)
 
 void desenhar_mapa(int mapa[LINHAS][COLUNAS])
 {
-    for (int i = 0; i < LINHAS; i++) {
-        for (int j = 0; j < COLUNAS; j++) {
+    for (int i = 0; i < LINHAS; i++){
+        for (int j = 0; j < COLUNAS; j++){
             int x = j * TAMANHO;
             int y = i * TAMANHO;
 
-            if (mapa[i][j] == PAREDE) {
+            if (mapa[i][j] == PAREDE){
                 DrawRectangle(x, y, TAMANHO, TAMANHO, (Color){70, 70, 80, 255});
 
                 DrawRectangleLines(x, y, TAMANHO, TAMANHO,(Color){40, 40, 50, 255});
@@ -68,12 +68,29 @@ int colide_parede(int mapa[LINHAS][COLUNAS], Rectangle area)
     int fimY = (int)((area.y + area.height - 0.001f)/ TAMANHO);
 
     for (int i = inicioY; i <= fimY; i++) {
-        for (int j = inicioX; j <= fimX; j++) {
-            if (mapa[i][j] == PAREDE) {
+        for (int j = inicioX; j <= fimX; j++){
+            if (mapa[i][j] == PAREDE){
                 return 1;
             }
         }
     }
 
     return 0;
+}
+int carregar_fase(int fase, int mapa[LINHAS][COLUNAS]){
+
+    switch (fase) {
+
+        case 1:
+            return carregar_mapa(mapa, "assets/paredes/mapa1.txt");
+
+        case 2:
+            return carregar_mapa(mapa, "assets/paredes/mapa2.txt");
+
+        case 3:
+            return carregar_mapa(mapa, "assets/paredes/mapa3.txt");
+
+        default:
+            return 0;
+    }
 }

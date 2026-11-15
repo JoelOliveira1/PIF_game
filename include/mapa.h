@@ -12,6 +12,7 @@
 #define PAREDE 1
 
 int carregar_mapa(int mapa[LINHAS][COLUNAS], const char *arquivo);
+int carregar_fase(int fase, int mapa[LINHAS][COLUNAS]);
 void desenhar_mapa(int mapa[LINHAS][COLUNAS]);
 int colide_parede(int mapa[LINHAS][COLUNAS], Rectangle area);
 
