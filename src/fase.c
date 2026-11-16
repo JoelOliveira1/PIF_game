@@ -44,7 +44,7 @@ static void posicionar_itens(Item **itens){
         case 2:
             criar_item(itens, 9, 3, ITEM_VIDA);
             criar_item(itens, 19, 14, ITEM_MUNICAO);
-            criar_item(itens, 2, 35, ITEM_MUNICAO);
+            criar_item(itens, 2, 37, ITEM_MUNICAO);
             break;
 
         case 3:
