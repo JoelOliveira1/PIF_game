@@ -20,7 +20,7 @@ int criar_item(Item **lista, int linha, int coluna, TipoItem tipo);
 
 void coletar_itens(Item **lista, Jogador *jogador, int *municao);
 
-void desenhar_itens(const Item *lista);
+void desenhar_itens(const Item *lista, Texture2D textura_vida, Texture2D textura_municao);
 
 void liberar_itens(Item **lista);
 

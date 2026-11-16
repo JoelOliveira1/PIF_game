@@ -65,6 +65,8 @@ int main(void){
     int abates = 0;
 
     Item *itens = NULL;
+    Texture2D textura_vida = LoadTexture("assets/itens/remedio.png");
+    Texture2D textura_municao = LoadTexture("assets/itens/municao.png");
 
     // --- 2. INICIALIZAÇÃO DO RANKING, CRONÔMETRO E PONTUAÇÃO ---
     RegistroPlacar* placar = CarregarPlacar("top_scores.txt");
@@ -204,7 +206,7 @@ int main(void){
 
             desenhar_mapa(mapa);
             desenhar_fase();
-            desenhar_itens(itens);
+            desenhar_itens(itens, textura_vida, textura_municao);
             desenhar_tiros(tiros);
             desenhar_inimigos(inimigos, textura_inimigo);
             desenhar_jogador(&jogador);
@@ -231,6 +233,8 @@ int main(void){
     liberar_inimigos(&inimigos);
     liberar_itens(&itens);
     UnloadTexture(textura_inimigo);
+    UnloadTexture(textura_vida);
+    UnloadTexture(textura_municao);
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
     descarregar_tela(&tela);

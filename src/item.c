@@ -1,17 +1,23 @@
 #include <stdlib.h>
 #include "item.h"
 
-#define TAMANHO_ITEM 16
+#define TAMANHO_ITEM_VIDA 20
+#define TAMANHO_ITEM_MUNICAO 32
 #define VIDA_ITEM 30
 #define MUNICAO_ITEM 6
 #define VIDA_MAXIMA 100
 
 static Rectangle area_do_item(const Item *item) {
+
+    float tamanho = TAMANHO_ITEM_MUNICAO;
+    if (item->tipo == ITEM_VIDA)
+        tamanho = TAMANHO_ITEM_VIDA;
+
     return (Rectangle){
-        item->posicao.x,
-        item->posicao.y,
-        TAMANHO_ITEM,
-        TAMANHO_ITEM
+        item->posicao.x + (TAMANHO - tamanho) / 2,
+        item->posicao.y + (TAMANHO - tamanho) / 2,
+        tamanho,
+        tamanho
     };
 }
 
@@ -22,10 +28,7 @@ int criar_item(Item **lista, int linha, int coluna, TipoItem tipo) {
     if (novo == NULL)
         return 0;
 
-    novo->posicao = (Vector2){
-        coluna * TAMANHO + (TAMANHO - TAMANHO_ITEM) / 2,
-        linha * TAMANHO + (TAMANHO - TAMANHO_ITEM) / 2
-    };
+    novo->posicao = (Vector2){coluna * TAMANHO, linha * TAMANHO};
     novo->tipo = tipo;
 
     novo->prox = *lista;
@@ -74,17 +77,19 @@ void coletar_itens(Item **lista, Jogador *jogador, int *municao) {
     }
 }
 
-void desenhar_itens(const Item *lista) {
+void desenhar_itens(const Item *lista, Texture2D textura_vida, Texture2D textura_municao) {
 
     const Item *atual = lista;
 
     while (atual != NULL) {
 
-        Color cor = ORANGE;
+        Texture2D textura = textura_municao;
         if (atual->tipo == ITEM_VIDA)
-            cor = GREEN;
+            textura = textura_vida;
 
-        DrawRectangleRec(area_do_item(atual), cor);
+        Rectangle origem = {0, 0, textura.width, textura.height};
+
+        DrawTexturePro(textura, origem, area_do_item(atual), (Vector2){0, 0}, 0, WHITE);
 
         atual = atual->prox;
     }
