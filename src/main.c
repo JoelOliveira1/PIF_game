@@ -23,7 +23,7 @@ int *municao, int *abates, float *cronometro,int *pontuacao){
     iniciar_fase(mapa, itens);
     iniciar_jogador(jogador, 2 * TAMANHO + 6, 2 * TAMANHO + 6);
     
-    *municao = 12;
+    *municao = 15;
     *abates = 0;
     *cronometro = 0;
     *pontuacao = 0;
@@ -235,6 +235,7 @@ int main(void){
     UnloadTexture(textura_inimigo);
     UnloadTexture(textura_vida);
     UnloadTexture(textura_municao);
+    liberar_texturas_fase();
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
     descarregar_tela(&tela);

@@ -18,5 +18,6 @@ int atualizar_fase(
 );
 
 void desenhar_fase(void);
+void liberar_texturas_fase(void);
 
 #endif
