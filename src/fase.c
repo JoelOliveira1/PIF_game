@@ -93,12 +93,10 @@ int atualizar_fase(
     liberar_inimigos(inimigos);
 
     fase_atual = proxima_fase;
-
+    posicionar_porta();
     jogador->posicao = (Vector2){70, 70};
 
-    gerar_inimigos(inimigos, mapa, 5, jogador->posicao);
-
-    porta = (Rectangle){1152, 320, 32, 64};
+    gerar_inimigos(inimigos, mapa, 7, jogador->posicao);
 
     return 0;
 }
