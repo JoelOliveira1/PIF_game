@@ -9,6 +9,9 @@ static Rectangle porta = {1152, 320, 32, 64};
 static Rectangle chave = {7 * TAMANHO+4, 3*TAMANHO+4, 24, 24};
 static Rectangle cartao = {35 * TAMANHO+4, 2 *TAMANHO + 4, 24, 24};
 
+static Texture2D textura_chave;
+static Texture2D textura_cracha;
+
 static void posicionar_porta(void) {
 
     switch (fase_atual) {
@@ -32,6 +35,9 @@ int iniciar_fase(int mapa[LINHAS][COLUNAS]){
     fase_atual = 1;
     tem_chave = 0;
     tem_cartao = 0;
+
+    textura_chave = LoadTexture("assets/itens/chave.png");
+    textura_cracha = LoadTexture("assets/itens/cracha.png");
 
     posicionar_porta();
 
@@ -104,11 +110,20 @@ int atualizar_fase(
 void desenhar_fase(void){
 
     if (fase_atual == 1 && !tem_chave){
-        DrawRectangleRec(chave, GOLD);
+        DrawTextureRec(textura_chave,
+        (Rectangle){0, 0, textura_chave.width, textura_chave.height},
+        (Vector2){chave.x, chave.y}, WHITE);
     }
     if (fase_atual == 2 && !tem_cartao){
-        DrawRectangleRec(cartao, BLUE);
+        DrawTextureRec(textura_cracha,(Rectangle){0, 0, textura_cracha.width, textura_cracha.height},
+        (Vector2){cartao.x, cartao.y},WHITE);
     }
 
     DrawRectangleRec(porta, RED);
+}
+
+void liberar_texturas_fase(void){
+    
+    UnloadTexture(textura_chave);
+    UnloadTexture(textura_cracha);
 }
