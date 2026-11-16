@@ -10,16 +10,17 @@
 #include "raking.h"
 #include "menu.h"
 #include "fase.h"
+#include "item.h"
 
 #define RAIO_LANTERNA 140
 
-void reiniciar_jogo( Jogador *jogador, Tiro **tiros, Inimigo **inimigos, int mapa[LINHAS][COLUNAS],
+void reiniciar_jogo( Jogador *jogador, Tiro **tiros, Inimigo **inimigos, Item **itens, int mapa[LINHAS][COLUNAS],
 int *municao, int *abates, float *cronometro,int *pontuacao){
-    
+
     liberar_tiros(tiros);
     liberar_inimigos(inimigos);
     descarregar_jogador(jogador);
-    iniciar_fase(mapa);
+    iniciar_fase(mapa, itens);
     iniciar_jogador(jogador, 2 * TAMANHO + 6, 2 * TAMANHO + 6);
     
     *municao = 12;
@@ -63,6 +64,8 @@ int main(void){
     gerar_inimigos(&inimigos, mapa, 5, jogador.posicao);
     int abates = 0;
 
+    Item *itens = NULL;
+
     // --- 2. INICIALIZAÇÃO DO RANKING, CRONÔMETRO E PONTUAÇÃO ---
     RegistroPlacar* placar = CarregarPlacar("top_scores.txt");
     float cronometro = 0.0f;
@@ -84,6 +87,7 @@ int main(void){
                     &jogador,
                     &tiros,
                     &inimigos,
+                    &itens,
                     mapa,
                     &municao,
                     &abates,
@@ -116,7 +120,9 @@ int main(void){
 
             atualizar_jogador(&jogador, mapa, dt);
 
-            if (atualizar_fase(&jogador, mapa, &tiros, &inimigos)){
+            coletar_itens(&itens, &jogador, &municao);
+
+            if (atualizar_fase(&jogador, mapa, &tiros, &inimigos, &itens)){
                 estado = MENU;
             } 
             else {
@@ -198,6 +204,7 @@ int main(void){
 
             desenhar_mapa(mapa);
             desenhar_fase();
+            desenhar_itens(itens);
             desenhar_tiros(tiros);
             desenhar_inimigos(inimigos, textura_inimigo);
             desenhar_jogador(&jogador);
@@ -222,6 +229,7 @@ int main(void){
     LiberarPlacar(placar);
     liberar_tiros(&tiros);
     liberar_inimigos(&inimigos);
+    liberar_itens(&itens);
     UnloadTexture(textura_inimigo);
     descarregar_jogador(&jogador);
     descarregar_lanterna(&lanterna);
