@@ -5,14 +5,16 @@
 #include "mapa.h"
 #include "tiro.h"
 #include "inimigo.h"
+#include "item.h"
 
-int iniciar_fase(int mapa[LINHAS][COLUNAS]);
+int iniciar_fase(int mapa[LINHAS][COLUNAS], Item **itens);
 
 int atualizar_fase(
     Jogador *jogador,
     int mapa[LINHAS][COLUNAS],
     Tiro **tiros,
-    Inimigo **inimigos
+    Inimigo **inimigos,
+    Item **itens
 );
 
 void desenhar_fase(void);

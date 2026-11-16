@@ -30,7 +30,33 @@ static void posicionar_porta(void) {
     }
 }
 
-int iniciar_fase(int mapa[LINHAS][COLUNAS]){
+static void posicionar_itens(Item **itens){
+
+    liberar_itens(itens);
+
+    switch(fase_atual){
+
+        case 1:
+            criar_item(itens, 2, 35, ITEM_VIDA);
+            criar_item(itens, 8, 4, ITEM_MUNICAO);
+            break;
+
+        case 2:
+            criar_item(itens, 9, 3, ITEM_VIDA);
+            criar_item(itens, 19, 14, ITEM_MUNICAO);
+            criar_item(itens, 2, 35, ITEM_MUNICAO);
+            break;
+
+        case 3:
+            criar_item(itens, 12, 4, ITEM_VIDA);
+            criar_item(itens, 19, 30, ITEM_VIDA);
+            criar_item(itens, 9, 20, ITEM_MUNICAO);
+            criar_item(itens, 3, 35, ITEM_MUNICAO);
+            break;
+    }
+}
+
+int iniciar_fase(int mapa[LINHAS][COLUNAS], Item **itens){
 
     fase_atual = 1;
     tem_chave = 0;
@@ -40,12 +66,13 @@ int iniciar_fase(int mapa[LINHAS][COLUNAS]){
     textura_cracha = LoadTexture("assets/itens/cracha.png");
 
     posicionar_porta();
+    posicionar_itens(itens);
 
     return carregar_fase(1, mapa);
 }
 
 int atualizar_fase(
-    Jogador *jogador, int mapa[LINHAS][COLUNAS], Tiro **tiros, Inimigo **inimigos){
+    Jogador *jogador, int mapa[LINHAS][COLUNAS], Tiro **tiros, Inimigo **inimigos, Item **itens){
 
     Vector2 centro = centro_do_jogador(jogador);
 
@@ -100,6 +127,7 @@ int atualizar_fase(
 
     fase_atual = proxima_fase;
     posicionar_porta();
+    posicionar_itens(itens);
     jogador->posicao = (Vector2){70, 70};
 
     gerar_inimigos(inimigos, mapa, 7, jogador->posicao);
