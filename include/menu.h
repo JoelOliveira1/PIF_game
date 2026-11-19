@@ -9,8 +9,8 @@ typedef enum {
     RANKING
 } EstadoJogo;
 
-void desenhar_menu(void);
-int atualizar_menu(void);
+void desenhar_menu(int jogo_em_andamento);
+int atualizar_menu(int jogo_em_andamento);
 
 void desenhar_ranking(void);
 int atualizar_ranking(void);

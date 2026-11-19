@@ -82,24 +82,26 @@ int atualizar_fase(
         24,
         24
     };
- 
+    // Pegar chave
     if (fase_atual == 1 && !tem_chave) {
         if (CheckCollisionRecs(area, chave)){
             tem_chave = 1;
         }
     }
 
+    // Pegar cartão
     if (fase_atual == 2 && !tem_cartao) {
         if (CheckCollisionRecs(area, cartao)){
             tem_cartao = 1;
         }
     }
 
+    // Verificar porta
     if (!CheckCollisionRecs(area, porta)){
         return 0;
     }
 
-
+    // Verificar se pode passar
     if (fase_atual == 1 && !tem_chave){
         return 0;
     }
@@ -108,11 +110,13 @@ int atualizar_fase(
         return 0;
     }
 
+    // Terminou a terceira fase
     if (fase_atual == 3){
         *pontuacao += 500;
         return 1;
     }
 
+    // Carregar next fase
     int proxima_fase = fase_atual + 1;
 
     if (!carregar_fase(proxima_fase, mapa)){
@@ -132,4 +136,25 @@ int atualizar_fase(
     gerar_inimigos(inimigos, mapa, 7, jogador->posicao);
 
     return 0;
+}
+
+void desenhar_fase(void){
+
+    if (fase_atual == 1 && !tem_chave){
+        DrawTextureRec(textura_chave,
+        (Rectangle){0, 0, textura_chave.width, textura_chave.height},
+        (Vector2){chave.x, chave.y}, WHITE);
+    }
+    if (fase_atual == 2 && !tem_cartao){
+        DrawTextureRec(textura_cracha,(Rectangle){0, 0, textura_cracha.width, textura_cracha.height},
+        (Vector2){cartao.x, cartao.y},WHITE);
+    }
+
+    DrawRectangleRec(porta, RED);
+}
+
+void liberar_texturas_fase(void){
+    
+    UnloadTexture(textura_chave);
+    UnloadTexture(textura_cracha);
 }

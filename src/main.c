@@ -15,7 +15,7 @@
 #define RAIO_LANTERNA 140
 
 void reiniciar_jogo( Jogador *jogador, Tiro **tiros, Inimigo **inimigos, Item **itens, int mapa[LINHAS][COLUNAS],
-int *municao, int *abates, float *cronometro,int *pontuacao){
+int *municao, int *abates, float *cronometro, int *pontuacao){
 
     liberar_tiros(tiros);
     liberar_inimigos(inimigos);
@@ -25,7 +25,7 @@ int *municao, int *abates, float *cronometro,int *pontuacao){
     
     *municao = 15;
     *abates = 0;
-    *cronometro = 0;
+    *cronometro = 0.0f;
     *pontuacao = 0;
 
     gerar_inimigos(inimigos, mapa, 5, jogador->posicao);
@@ -42,7 +42,7 @@ int main(void){
     Tela tela;
     iniciar_tela(&tela);
 
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 
     int mapa[LINHAS][COLUNAS];
     
@@ -72,6 +72,7 @@ int main(void){
     RegistroPlacar* placar = CarregarPlacar("top_scores.txt");
     float cronometro = 0.0f;
     int pontuacao = 0;
+    int jogo_em_andamento = 0;
     EstadoJogo estado = MENU;
 
     while (!WindowShouldClose()){
@@ -80,9 +81,9 @@ int main(void){
 
         if (estado == MENU){
 
-            int opcao = atualizar_menu();
+            int opcao = atualizar_menu(jogo_em_andamento);
 
-            // jogar
+            // jogar / novo jogo
             if (opcao == 1){
 
                 reiniciar_jogo(
@@ -96,6 +97,7 @@ int main(void){
                     &cronometro,
                     &pontuacao
                 );
+                jogo_em_andamento = 1;
                 estado = JOGANDO;
             }
             // ranking
@@ -105,6 +107,10 @@ int main(void){
             // sair
             else if (opcao == 3){
                 break;
+            }
+            // continuar
+            else if (opcao == 4 && jogo_em_andamento){
+                estado = JOGANDO;
             }
         }
 
@@ -117,62 +123,68 @@ int main(void){
 
         else if (estado == JOGANDO) {
 
-            cronometro += dt;
-
-            atualizar_jogador(&jogador, mapa, dt);
-
-            coletar_itens(&itens, &jogador, &municao);
-
-            if (atualizar_fase(&jogador, mapa, &tiros, &inimigos, &itens, &pontuacao)){
-                placar = InserirPlacar(
-                    placar,
-                    "Jogador1",
-                    pontuacao,
-                    cronometro
-                );
-                SalvarPlacar(placar, "top_scores.txt");
+            if (IsKeyPressed(KEY_ESCAPE)) {
                 estado = MENU;
-            } 
+            }
             else {
-                // Disparo
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && municao > 0) {
+                cronometro += dt;
 
-                    if (criar_tiro(&tiros,centro_do_jogador(&jogador),GetMousePosition())){
-                        municao--;
-                    }
-                }
+                atualizar_jogador(&jogador, mapa, dt);
 
-                verificar_colisao_jogador(inimigos, &jogador);
+                coletar_itens(&itens, &jogador, &municao);
 
-                atualizar_tiros(&tiros, mapa, dt);
-
-                atualizar_inimigos(
-                    inimigos,
-                    mapa,
-                    centro_do_jogador(&jogador),
-                    dt
-                );
-
-                int novos_abates = atingir_inimigos(&inimigos, &tiros);
-                if (novos_abates > 0) {
-                    abates += novos_abates;
-                    pontuacao += novos_abates * 100;
-                }
-
-                if (jogador.vida <= 0) {
-
-                    jogador.vida = 0;
-
+                if (atualizar_fase(&jogador, mapa, &tiros, &inimigos, &itens, &pontuacao)){
                     placar = InserirPlacar(
                         placar,
                         "Jogador1",
                         pontuacao,
                         cronometro
                     );
-
                     SalvarPlacar(placar, "top_scores.txt");
-
+                    jogo_em_andamento = 0;
                     estado = MENU;
+                } 
+                else {
+                    // Disparo
+                    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && municao > 0) {
+
+                        if (criar_tiro(&tiros,centro_do_jogador(&jogador),GetMousePosition())){
+                            municao--;
+                        }
+                    }
+
+                    verificar_colisao_jogador(inimigos, &jogador);
+
+                    atualizar_tiros(&tiros, mapa, dt);
+
+                    atualizar_inimigos(
+                        inimigos,
+                        mapa,
+                        centro_do_jogador(&jogador),
+                        dt
+                    );
+
+                    int novos_abates = atingir_inimigos(&inimigos, &tiros);
+                    if (novos_abates > 0) {
+                        abates += novos_abates;
+                        pontuacao += novos_abates * 100;
+                    }
+
+                    if (jogador.vida <= 0) {
+
+                        jogador.vida = 0;
+
+                        placar = InserirPlacar(
+                            placar,
+                            "Jogador1",
+                            pontuacao,
+                            cronometro
+                        );
+
+                        SalvarPlacar(placar, "top_scores.txt");
+                        jogo_em_andamento = 0;
+                        estado = MENU;
+                    }
                 }
             }
         }
@@ -184,7 +196,7 @@ int main(void){
         // MENU INICIAL
         if (estado == MENU) {
 
-            desenhar_menu();
+            desenhar_menu(jogo_em_andamento);
         }
 
         // TELA DE RANKING
