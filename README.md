@@ -31,3 +31,10 @@ Encontre uma maneira de sobreviver a esse ataque zumbi. Explore o hospital, tent
   Tudo não passou de uma paranoia. Nunca existiram zumbis naquele lugar.
 
 </details>
+
+## Instruções de compilação
+### No Windows:
+* Clone o repositório para o VSCode;
+* No mesmo terminal do VSCode rode o comando `$env:PATH = "C:\raylib\w64devkit\bin;" + $env:PATH` se o PATH do terminal não encontrar o compilador;
+* Rode o comando `make run`;
+* Aproveite!
