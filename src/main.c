@@ -118,13 +118,19 @@ int main(void){
         else if (estado == JOGANDO) {
 
             cronometro += dt;
-            pontuacao = (int)abates * 100;
 
             atualizar_jogador(&jogador, mapa, dt);
 
             coletar_itens(&itens, &jogador, &municao);
 
-            if (atualizar_fase(&jogador, mapa, &tiros, &inimigos, &itens)){
+            if (atualizar_fase(&jogador, mapa, &tiros, &inimigos, &itens, &pontuacao)){
+                placar = InserirPlacar(
+                    placar,
+                    "Jogador1",
+                    pontuacao,
+                    cronometro
+                );
+                SalvarPlacar(placar, "top_scores.txt");
                 estado = MENU;
             } 
             else {
@@ -147,7 +153,11 @@ int main(void){
                     dt
                 );
 
-                abates += atingir_inimigos(&inimigos, &tiros);
+                int novos_abates = atingir_inimigos(&inimigos, &tiros);
+                if (novos_abates > 0) {
+                    abates += novos_abates;
+                    pontuacao += novos_abates * 100;
+                }
 
                 if (jogador.vida <= 0) {
 
@@ -171,13 +181,11 @@ int main(void){
 
         ClearBackground(BLACK);
 
-        // MENU INICIAL
         if (estado == MENU) {
 
             desenhar_menu();
         }
 
-        // TELA DE RANKING
         else if (estado == RANKING){
 
             desenhar_ranking();

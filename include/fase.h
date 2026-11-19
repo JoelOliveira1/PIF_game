@@ -14,7 +14,8 @@ int atualizar_fase(
     int mapa[LINHAS][COLUNAS],
     Tiro **tiros,
     Inimigo **inimigos,
-    Item **itens
+    Item **itens,
+    int *pontuacao
 );
 
 void desenhar_fase(void);
