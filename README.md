@@ -38,3 +38,6 @@ Encontre uma maneira de sobreviver a esse ataque zumbi. Explore o hospital, tent
 * No mesmo terminal do VSCode rode o comando `$env:PATH = "C:\raylib\w64devkit\bin;" + $env:PATH` se o PATH do terminal não encontrar o compilador;
 * Rode o comando `make run`;
 * Aproveite!
+
+## Vídeo do jogo sendo executado
+<https://youtu.be/F6RTW8-muVs>
