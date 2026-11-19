@@ -181,11 +181,13 @@ int main(void){
 
         ClearBackground(BLACK);
 
+        // MENU INICIAL
         if (estado == MENU) {
 
             desenhar_menu();
         }
 
+        // TELA DE RANKING
         else if (estado == RANKING){
 
             desenhar_ranking();
