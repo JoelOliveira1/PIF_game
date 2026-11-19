@@ -40,8 +40,8 @@ Encontre uma maneira de sobreviver a esse ataque zumbi. Explore o hospital, tent
 * Aproveite!
 ### No Linux/Mac:
 * Clone o repositório para o VSCode;
-* No terminal para compilar o jogo 'make';
-* Para rodar use 'make run';
+* No terminal para compilar o jogo `make`;
+* Para rodar use `make run`;
 
 ## Vídeo do jogo sendo executado
 <https://youtu.be/F6RTW8-muVs>
