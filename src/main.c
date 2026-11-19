@@ -13,6 +13,7 @@
 #include "item.h"
 
 #define RAIO_LANTERNA 140
+#define VELOCIDADE_TEMPO 0.5f
 
 void reiniciar_jogo( Jogador *jogador, Tiro **tiros, Inimigo **inimigos, Item **itens, int mapa[LINHAS][COLUNAS],
 int *municao, int *abates, float *cronometro, int *pontuacao){
@@ -127,7 +128,7 @@ int main(void){
                 estado = MENU;
             }
             else {
-                cronometro += dt;
+                cronometro += dt *VELOCIDADE_TEMPO;
 
                 atualizar_jogador(&jogador, mapa, dt);
 
