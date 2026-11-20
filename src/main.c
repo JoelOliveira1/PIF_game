@@ -69,7 +69,6 @@ int main(void){
     Texture2D textura_vida = LoadTexture("assets/itens/remedio.png");
     Texture2D textura_municao = LoadTexture("assets/itens/municao.png");
 
-    // --- 2. INICIALIZAÇÃO DO RANKING, CRONÔMETRO E PONTUAÇÃO ---
     RegistroPlacar* placar = CarregarPlacar("top_scores.txt");
     float cronometro = 0.0f;
     int pontuacao = 0;
@@ -84,7 +83,6 @@ int main(void){
 
             int opcao = atualizar_menu(jogo_em_andamento);
 
-            // jogar / novo jogo
             if (opcao == 1){
 
                 reiniciar_jogo(
@@ -101,15 +99,12 @@ int main(void){
                 jogo_em_andamento = 1;
                 estado = JOGANDO;
             }
-            // ranking
             else if (opcao == 2){
                 estado = RANKING;
             }
-            // sair
             else if (opcao == 3){
                 break;
             }
-            // continuar
             else if (opcao == 4 && jogo_em_andamento){
                 estado = JOGANDO;
             }
@@ -146,7 +141,6 @@ int main(void){
                     estado = MENU;
                 } 
                 else {
-                    // Disparo
                     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && municao > 0) {
 
                         if (criar_tiro(&tiros,centro_do_jogador(&jogador),GetMousePosition())){
@@ -194,13 +188,11 @@ int main(void){
 
         ClearBackground(BLACK);
 
-        // MENU INICIAL
         if (estado == MENU) {
 
             desenhar_menu(jogo_em_andamento);
         }
 
-        // TELA DE RANKING
         else if (estado == RANKING){
 
             desenhar_ranking();
