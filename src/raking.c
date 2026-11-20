@@ -4,7 +4,6 @@
 #include <string.h>
 
 RegistroPlacar* InserirPlacar(RegistroPlacar* cabeca, const char* nome, int pontuacao, float tempo) {
-    // Alocação dinâmica de memória
     RegistroPlacar* novo = (RegistroPlacar*)malloc(sizeof(RegistroPlacar));
     strcpy(novo->nome, nome);
     novo->pontuacao = pontuacao;
@@ -55,6 +54,6 @@ void LiberarPlacar(RegistroPlacar* cabeca) {
     while (atual != NULL) {
         RegistroPlacar* temp = atual;
         atual = atual->prox;
-        free(temp); // Liberando a memória
+        free(temp); 
     }
 }
