@@ -82,26 +82,22 @@ int atualizar_fase(
         24,
         24
     };
-    // Pegar chave
     if (fase_atual == 1 && !tem_chave) {
         if (CheckCollisionRecs(area, chave)){
             tem_chave = 1;
         }
     }
 
-    // Pegar cartão
     if (fase_atual == 2 && !tem_cartao) {
         if (CheckCollisionRecs(area, cartao)){
             tem_cartao = 1;
         }
     }
 
-    // Verificar porta
     if (!CheckCollisionRecs(area, porta)){
         return 0;
     }
 
-    // Verificar se pode passar
     if (fase_atual == 1 && !tem_chave){
         return 0;
     }
@@ -110,13 +106,11 @@ int atualizar_fase(
         return 0;
     }
 
-    // Terminou a terceira fase
     if (fase_atual == 3){
         *pontuacao += 500;
         return 1;
     }
 
-    // Carregar next fase
     int proxima_fase = fase_atual + 1;
 
     if (!carregar_fase(proxima_fase, mapa)){
